@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Layout.scss';
 
-const layout = props => (
+const Layout = props => (
   <>
     <div>Toolbar, SideDrawer, Backdrop</div>
     <main className="content">
@@ -11,4 +11,4 @@ const layout = props => (
   </>
 );
 
-export default layout;
+export default Layout;

@@ -4,7 +4,8 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 import './Burger.scss';
 
-const burger = props => {
+
+const Burger = props => {
   // convert object to array of keys (array of arrays)
   const transformedIngredients = Object.keys(props.ingredients)
     .map(igKey => {
@@ -32,4 +33,4 @@ const burger = props => {
   );
 };
 
-export default burger;
+export default Burger;
