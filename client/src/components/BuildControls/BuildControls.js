@@ -12,9 +12,18 @@ const controls = [
   { label: 'Meat', type: 'meat' }
 ];
 
-const BuildControls = () => (
+const BuildControls = props => (
   <div className="build-controls">
-    { controls.map(control => <BuildControl {...control} key={control.type} />) }
+    <p>Total Price: <strong>{props.totalPrice.toFixed(1)}</strong></p>
+    { controls.map(control => (
+      <BuildControl
+        {...control}
+        // set to false if value of type is zero
+        disabled={!props.ingredients[control.type]}
+        key={control.label}
+        added={() => props.ingredientAdded(control.type)}
+        removed={() => props.ingredientRemoved(control.type)} />))
+    }
   </div>
 );
 
