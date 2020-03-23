@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
-import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/BuildControls/BuildControls';
+import Burger from '../../components/Burger/Burger';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/OrderSummary/OrderSummary';
+
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -19,7 +22,22 @@ export default class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0
     },
-    totalPrice: 4
+    totalPrice: 4,
+    purchasable: false,
+    inPurchaseMode: false
+  }
+
+  purchaseHandler = () => {
+    this.setState(prevState => ({ inPurchaseMode: !prevState.inPurchaseMode }));
+  }
+
+  updatePurchaseState = ingredients => {
+    // return true or false depending if ingredients have been added
+    let sum = 0;
+    for (let property in ingredients) {
+      sum += ingredients[property];
+    }
+    this.setState({ purchasable: sum > 0 });
   }
 
   addIngredientHandler = type => {
@@ -28,7 +46,7 @@ export default class BurgerBuilder extends Component {
 
     const totalPrice = this.state.totalPrice + INGREDIENT_PRICES[type];
     this.setState({ totalPrice, ingredients });
-
+    this.updatePurchaseState(ingredients);
   }
 
   removeIngredientHandler = type => {
@@ -38,15 +56,21 @@ export default class BurgerBuilder extends Component {
 
       const totalPrice = this.state.totalPrice - INGREDIENT_PRICES[type];
       this.setState({ totalPrice, ingredients });
+      this.updatePurchaseState(ingredients);
     }
   }
 
   render() {
     return (
       <>
+        <Modal show={this.state.inPurchaseMode}  exitPurchaseMode={this.purchaseHandler}>
+          <OrderSummary ingredients={this.state.ingredients} />
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
+          handlePurchase={this.purchaseHandler}
           totalPrice={this.state.totalPrice}
+          purchasable={this.state.purchasable}
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           // will use boolean value to check if "less" button should be disabled

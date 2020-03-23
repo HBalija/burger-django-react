@@ -15,15 +15,22 @@ const controls = [
 const BuildControls = props => (
   <div className="build-controls">
     <p>Total Price: <strong>{props.totalPrice.toFixed(1)}</strong></p>
-    { controls.map(control => (
-      <BuildControl
-        {...control}
-        // set to false if value of type is zero
-        disabled={!props.ingredients[control.type]}
-        key={control.label}
-        added={() => props.ingredientAdded(control.type)}
-        removed={() => props.ingredientRemoved(control.type)} />))
+    {
+      controls.map(control => (
+        <BuildControl
+          {...control}
+          // set to false if value of type is zero
+          disabled={!props.ingredients[control.type]}
+          key={control.label}
+          added={() => props.ingredientAdded(control.type)}
+          removed={() => props.ingredientRemoved(control.type)} />))
     }
+    <button
+      onClick={props.handlePurchase}
+      className="order-button"
+      disabled={!props.purchasable}>
+        ORDER NOW
+    </button>
   </div>
 );
 
