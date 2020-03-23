@@ -1,0 +1,33 @@
+.side-drawer {
+  position: fixed;
+  width: 289px;
+  max-width: 70%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index:200;
+  background-color: #fff;
+  padding: 32px 16px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+}
+
+// only show side drawer on smaller devices
+@media (min-width: 500px) {
+  .side-drawer {
+    display: none;
+  }
+}
+
+.open {
+  transform: translateX(0);
+}
+
+.close {
+  transform: translateX(-100%); // shift to the left out of viewport
+}
+
+.side-drawer-logo {
+  height: 11%;
+  margin-bottom: 32px;
+}

@@ -6,11 +6,13 @@ import NavigationItems from '../NavigationItems/NavigationItems';
 import './Toolbar.scss';
 
 
-const Toolbar = () => (
+const Toolbar = props => (
   <header className="toolbar">
-    <div>MENU</div>
-    <Logo />
-    <nav>
+    <div onClick={props.onSideDrawerAction}>MENU</div>
+    <div className="toolbar-logo">
+      <Logo  />
+    </div>
+    <nav className="desktop-only">
       <NavigationItems />
     </nav>
   </header>

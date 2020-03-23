@@ -7,7 +7,7 @@ import './Modal.scss';
 
 const Modal = props => (
   <>
-    <Backdrop show={props.show} exitPurchaseMode={props.exitPurchaseMode} />
+    <Backdrop show={props.show} clicked={props.exitPurchaseMode} />
     <div
       className="modal"
       style={{
