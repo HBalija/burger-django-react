@@ -8,7 +8,11 @@ import './Toolbar.scss';
 
 const Toolbar = props => (
   <header className="toolbar">
-    <div onClick={props.onSideDrawerAction}>MENU</div>
+    <div onClick={props.onSideDrawerAction} className="drawer-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
     <div className="toolbar-logo">
       <Logo  />
     </div>
