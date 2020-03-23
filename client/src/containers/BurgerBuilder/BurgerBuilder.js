@@ -31,6 +31,10 @@ export default class BurgerBuilder extends Component {
     this.setState(prevState => ({ inPurchaseMode: !prevState.inPurchaseMode }));
   }
 
+  purchaseContinueHandler = () => {
+    alert('Continue');
+  }
+
   updatePurchaseState = ingredients => {
     // return true or false depending if ingredients have been added
     let sum = 0;
@@ -64,7 +68,11 @@ export default class BurgerBuilder extends Component {
     return (
       <>
         <Modal show={this.state.inPurchaseMode}  exitPurchaseMode={this.purchaseHandler}>
-          <OrderSummary ingredients={this.state.ingredients} />
+          <OrderSummary
+            totalPrice={this.state.totalPrice}
+            ingredients={this.state.ingredients}
+            onContinue={this.purchaseContinueHandler}
+            onCancel={this.purchaseHandler} />
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
