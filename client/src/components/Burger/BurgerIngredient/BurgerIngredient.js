@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import './BurgerIngredient.scss';
 
-class BurgerIngredient extends Component {
 
+class BurgerIngredient extends Component {
   render() {
     let ingredient = null;
 
