@@ -20,16 +20,22 @@ const INGREDIENT_PRICES = {
 class BurgerBuilder extends Component {
 
   state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0
-    },
+    ingredients: null,
     total_price: 4,
     purchasable: false,
     inPurchaseMode: false,
-    loading: false
+    loading: false,
+    error: false
+  }
+
+  componentDidMount() {
+    axios.get('/ingredients/')
+      .then(response => {
+        this.setState({ ingredients: response.data });
+      }).catch(error => {
+        console.log(error); // eslint-disable-line no-console
+        this.setState({ error: true });
+      });
   }
 
   purchaseHandler = () => {
@@ -74,7 +80,7 @@ class BurgerBuilder extends Component {
       order_address: 'some address'
     };
 
-    axios.post('/ordes/', order)
+    axios.post('/orders/', order)
       .then(response => {
         console.log(response); // eslint-disable-line no-console
         this.setState({ loading:false, inPurchaseMode: false });
@@ -88,7 +94,25 @@ class BurgerBuilder extends Component {
 
   render() {
 
-    // use spinner if loading
+    // use spinner while fetching ingredients
+    let burger = this.state.error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
+    if (this.state.ingredients) {
+      burger = (
+        <>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls
+            handlePurchase={this.purchaseHandler}
+            total_price={this.state.total_price}
+            purchasable={this.state.purchasable}
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            // will use boolean value to check if "less" button should be disabled
+            ingredients={this.state.ingredients} />
+        </>
+      );
+    }
+
+    // use spinner if loading on post request
     let orderSummary = (
       <OrderSummary
         total_price={this.state.total_price}
@@ -103,15 +127,7 @@ class BurgerBuilder extends Component {
         <Modal show={this.state.inPurchaseMode}  modalClosed={this.purchaseHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          handlePurchase={this.purchaseHandler}
-          total_price={this.state.total_price}
-          purchasable={this.state.purchasable}
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          // will use boolean value to check if "less" button should be disabled
-          ingredients={this.state.ingredients} />
+        {burger}
       </>
     );
   }

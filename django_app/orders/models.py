@@ -15,3 +15,17 @@ class Order(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class Ingredient(models.Model):
+    salad = models.PositiveSmallIntegerField(default=0)
+    bacon = models.PositiveSmallIntegerField(default=0)
+    meat = models.PositiveSmallIntegerField(default=0)
+    cheese = models.PositiveSmallIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return 'Default ingredients'
