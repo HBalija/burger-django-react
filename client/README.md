@@ -2,6 +2,7 @@
 
 ## Work in progress
 
+Client app based on udemy course.
 
 ### Setup (development only)
 

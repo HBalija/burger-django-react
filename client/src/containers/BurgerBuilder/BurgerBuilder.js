@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import axios from '../../axios-order';
+
 import BuildControls from '../../components/BuildControls/BuildControls';
 import Burger from '../../components/Burger/Burger';
 import Modal from '../../components/UI/Modal/Modal';
@@ -22,17 +24,13 @@ export default class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0
     },
-    totalPrice: 4,
+    total_price: 4,
     purchasable: false,
     inPurchaseMode: false
   }
 
   purchaseHandler = () => {
     this.setState(prevState => ({ inPurchaseMode: !prevState.inPurchaseMode }));
-  }
-
-  purchaseContinueHandler = () => {
-    alert('Continue');
   }
 
   updatePurchaseState = ingredients => {
@@ -48,8 +46,8 @@ export default class BurgerBuilder extends Component {
     const ingredients = { ...this.state.ingredients };
     ingredients[type] = this.state.ingredients[type] + 1;
 
-    const totalPrice = this.state.totalPrice + INGREDIENT_PRICES[type];
-    this.setState({ totalPrice, ingredients });
+    const total_price = this.state.total_price + INGREDIENT_PRICES[type];
+    this.setState({ total_price, ingredients });
     this.updatePurchaseState(ingredients);
   }
 
@@ -58,18 +56,31 @@ export default class BurgerBuilder extends Component {
     if (ingredients[type] > 0) {
       ingredients[type] = this.state.ingredients[type] - 1;
 
-      const totalPrice = this.state.totalPrice - INGREDIENT_PRICES[type];
-      this.setState({ totalPrice, ingredients });
+      const total_price = this.state.total_price - INGREDIENT_PRICES[type];
+      this.setState({ total_price, ingredients });
       this.updatePurchaseState(ingredients);
     }
   }
+
+  purchaseContinueHandler = () => {
+    const order = {
+      ...this.state.ingredients,
+      price: this.state.total_price.toFixed(1),
+      order_address: 'some address'
+    };
+
+    axios.post('/orders/', order)
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  }
+
 
   render() {
     return (
       <>
         <Modal show={this.state.inPurchaseMode}  exitPurchaseMode={this.purchaseHandler}>
           <OrderSummary
-            totalPrice={this.state.totalPrice}
+            total_price={this.state.total_price}
             ingredients={this.state.ingredients}
             onContinue={this.purchaseContinueHandler}
             onCancel={this.purchaseHandler} />
@@ -77,7 +88,7 @@ export default class BurgerBuilder extends Component {
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           handlePurchase={this.purchaseHandler}
-          totalPrice={this.state.totalPrice}
+          total_price={this.state.total_price}
           purchasable={this.state.purchasable}
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
