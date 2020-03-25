@@ -7,7 +7,7 @@ import Burger from '../../components/Burger/Burger';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../../HOC/withErrorHandler/withErrorHandler';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
 const INGREDIENT_PRICES = {
@@ -88,7 +88,6 @@ class BurgerBuilder extends Component {
 
 
   render() {
-
     // use spinner while fetching ingredients
     let burger = this.state.error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
     if (this.state.ingredients) {
