@@ -72,23 +72,34 @@ class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = () => {
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
 
-    const order = {
-      ...this.state.ingredients,
-      price: this.state.total_price.toFixed(1),
-      order_address: 'some address'
-    };
+    // const order = {
+    //   ...this.state.ingredients,
+    //   price: this.state.total_price.toFixed(1),
+    //   order_address: 'some address'
+    // };
 
-    axios.post('/orders/', order)
-      .then(response => {
-        console.log(response); // eslint-disable-line no-console
-        this.setState({ loading:false, inPurchaseMode: false });
-      })
-      .catch(error => {
-        console.log(error); // eslint-disable-line no-console
-        this.setState({ loading:false, inPurchaseMode: false });
-      });
+    // axios.post('/orders/', order)
+    //   .then(response => {
+    //     console.log(response); // eslint-disable-line no-console
+    //     this.setState({ loading:false, inPurchaseMode: false });
+    //   })
+    //   .catch(error => {
+    //     console.log(error); // eslint-disable-line no-console
+    //     this.setState({ loading:false, inPurchaseMode: false });
+    //   });
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname: '/checkout',
+      search: `?${queryString}`
+    });
   }
 
 
