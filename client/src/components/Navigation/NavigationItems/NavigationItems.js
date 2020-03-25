@@ -7,8 +7,8 @@ import './NavigationItems.scss';
 
 const NavigationItems = () => (
   <ul className="navigation-items">
-    <NavigationItem link="/" active>Burger Builder</NavigationItem>
-    <NavigationItem link="/">Checkout</NavigationItem>
+    <NavigationItem link="/">Burger Builder</NavigationItem>
+    <NavigationItem link="/orders">Orders</NavigationItem>
   </ul>
 );
 

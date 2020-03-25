@@ -2,8 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Layout from './HOC/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import Checkout from './containers/Checkout/Checkout';
+import BurgerContainer from './containers/BurgerContainer/BurgerContainer';
+import CheckoutContainer from './containers/CheckoutContainer/CheckoutContainer';
+import OrdersContainer from './containers/OrdersContainer/OrdersContainer';
 
 
 function App() {
@@ -11,8 +12,9 @@ function App() {
     <div>
       <Layout>
         <Switch>
-          <Route component={BurgerBuilder} exact path="/" />
-          <Route component={Checkout} path="/checkout" />
+          <Route component={CheckoutContainer} path="/checkout" />
+          <Route component={OrdersContainer} path="/orders" />
+          <Route component={BurgerContainer} exact path="/" />
         </Switch>
       </Layout>
     </div>
