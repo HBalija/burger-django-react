@@ -10,6 +10,17 @@ class Order(models.Model):
     cheese = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    DELIVERY_METHOD_FASTEST = 'fastest'
+    DELIVERY_METHOD_CHEAPEST = 'cheapest'
+
+    DELIVERY_METHOD_CHOICES = (
+        (DELIVERY_METHOD_FASTEST, 'Fastest'),
+        (DELIVERY_METHOD_CHEAPEST, 'cheapest'),
+    )
+
+    delivery_method = models.CharField(
+        max_length=255, choices=DELIVERY_METHOD_CHOICES, default=DELIVERY_METHOD_FASTEST)
+
     def __str__(self):
         return f'{self.id} - {self.price}'
 
