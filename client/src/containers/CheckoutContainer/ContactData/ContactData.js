@@ -59,11 +59,14 @@ class ContactData extends Component {
             { value: 'cheapest', displayValue: 'Cheapest' }
           ],
         },
-        value: 'fastest'
+        value: 'fastest',
+        valid: true, // add valid and validation to simplfify validation checks
+        validation: {}  // empty object and true pass all validations
       }
     },
 
-    loading: false
+    loading: false,
+    formIsValid : false
   }
 
   checkValidity = (value, rules) => {
@@ -73,6 +76,28 @@ class ContactData extends Component {
     if (rules.minLength) isValid = value.length >= rules.minLength && isValid;
 
     return isValid;
+  }
+
+  inputChangedHandler = (event, inputIdentifier) => {
+    // create deep copies of nested objects (we need to access value property)
+    const updatedOrderForm = { ...this.state.orderForm };
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+
+    updatedFormElement.value = event.target.value;
+
+    updatedFormElement.touched = true;
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value, updatedFormElement.validation);
+
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+    // check if whole form is valid
+    let formIsValid = true;
+    for (let inputIdentifier in updatedOrderForm) {
+      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+    }
+
+    this.setState(() => ({ orderForm: updatedOrderForm, formIsValid }));
   }
 
   orderHandler = event => {
@@ -99,26 +124,6 @@ class ContactData extends Component {
       });
   }
 
-  inputChangedHandler = (event, inputIdentifier) => {
-    // create deep copies of nested objects (we need to access value property)
-    const updatedOrderForm = { ...this.state.orderForm };
-    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
-
-    updatedFormElement.value = event.target.value;
-
-    // check validation (don't check for select)
-    if (updatedFormElement.validation) {
-      updatedFormElement.touched = true;
-      updatedFormElement.valid = this.checkValidity(
-        updatedFormElement.value, updatedFormElement.validation);
-    }
-
-
-    updatedOrderForm[inputIdentifier] = updatedFormElement;
-
-    this.setState(() => ({ orderForm: updatedOrderForm }));
-  }
-
   render () {
     const formElements = [];
     for (let key in this.state.orderForm) {
@@ -134,8 +139,6 @@ class ContactData extends Component {
           <Input
             // check if input is valid
             invalid={!formElement.config.valid}
-            // check if validation property is set then set to true (false for select)
-            shouldValidate={formElement.config.validation}
             // check if user touched input (apply invalid classes only if did)
             touched={formElement.config.touched}
             changed={event => this.inputChangedHandler(event, formElement.id)}
@@ -144,7 +147,7 @@ class ContactData extends Component {
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value} />
         ))}
-        <Button btnType="success">ORDER</Button>
+        <Button disabled={!this.state.formIsValid} btnType="success">ORDER</Button>
       </form>
     );
     if (this.state.loading) form = <Spinner />;

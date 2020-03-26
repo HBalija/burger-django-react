@@ -8,7 +8,7 @@ const Input = props => {
   let inputElement = null;
   const inputClasses = ['input-element'];
   // add validation feedback styling to initial styling
-  if (props.invalid && props.shouldValidate && props.touched) inputClasses.push('invalid');
+  if (props.invalid && props.touched) inputClasses.push('invalid');
 
   switch (props.elementType) {
 
