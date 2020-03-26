@@ -1,5 +1,13 @@
 import * as actionTypes from './actions';
 
+
+const INGREDIENT_PRICES = {
+  salad: 0.5,
+  cheese: 0.4,
+  meat: 1.3,
+  bacon: 0.7
+};
+
 const initialState = {
   ingredients: {
     salad: 0,
@@ -20,7 +28,8 @@ export default (state = initialState, action) => {
       ingredients: {
         ...state.ingredients,
         [action.ingName]: state.ingredients[action.ingName] + 1
-      }
+      },
+      total_price: state.total_price + INGREDIENT_PRICES[action.ingName]
     };
 
   case actionTypes.REMOVE_INGREDIENT:
@@ -29,7 +38,8 @@ export default (state = initialState, action) => {
       ingredients: {
         ...state.ingredients,
         [action.ingName]: state.ingredients[action.ingName] - 1
-      }
+      },
+      total_price: state.total_price + INGREDIENT_PRICES[action.ingName]
     };
 
   default:

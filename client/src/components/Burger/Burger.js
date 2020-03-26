@@ -4,11 +4,12 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 import './Burger.scss';
 
 
-const Burger = props => {
+const Burger = ({ ingredients }) => {
+
   // convert object to array of keys (array of arrays)
-  const transformedIngredients = Object.keys(props.ingredients)
+  const transformedIngredients = Object.keys(ingredients)
     .map(igKey => {
-      return [...Array(props.ingredients[igKey])]
+      return [...Array(ingredients[igKey])]
         .map((_, idx) => {
           return <BurgerIngredient key={igKey + idx} type={igKey} />;
         });
