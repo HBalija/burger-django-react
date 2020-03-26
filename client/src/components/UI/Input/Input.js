@@ -6,6 +6,9 @@ import './Input.scss';
 const Input = props => {
 
   let inputElement = null;
+  const inputClasses = ['input-element'];
+  // add validation feedback styling to initial styling
+  if (props.invalid && props.shouldValidate && props.touched) inputClasses.push('invalid');
 
   switch (props.elementType) {
 
@@ -13,7 +16,7 @@ const Input = props => {
     inputElement = (
       <select
         onChange={props.changed}
-        className="input-element"
+        className={inputClasses.join(' ')}
         value={props.value}>
         {props.elementConfig.options.map(option => {
           return (
@@ -29,7 +32,7 @@ const Input = props => {
   case 'textarea':
     inputElement = <textarea
       onChange={props.changed}
-      className="input-element"
+      className={inputClasses.join(' ')}
       {...props.elementConfig}
       value={props.value} />;
     break;
@@ -37,7 +40,7 @@ const Input = props => {
   default:
     inputElement = <input
       onChange={props.changed}
-      className="input-element"
+      className={inputClasses.join(' ')}
       {...props.elementConfig }
       value={props.value} />;
   }

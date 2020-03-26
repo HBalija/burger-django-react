@@ -18,7 +18,12 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Your name'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       email: {
         elementType: 'input',
@@ -26,7 +31,12 @@ class ContactData extends Component {
           type: 'email',
           placeholder: 'Your email'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       order_address: {
         elementType: 'input',
@@ -34,7 +44,12 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Your address'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       delivery_method: {
         elementType: 'select',
@@ -49,6 +64,15 @@ class ContactData extends Component {
     },
 
     loading: false
+  }
+
+  checkValidity = (value, rules) => {
+    let isValid = true;
+
+    if (rules.required) isValid = value.trim() !== '' && isValid;
+    if (rules.minLength) isValid = value.length >= rules.minLength && isValid;
+
+    return isValid;
   }
 
   orderHandler = event => {
@@ -81,6 +105,15 @@ class ContactData extends Component {
     const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
 
     updatedFormElement.value = event.target.value;
+
+    // check validation (don't check for select)
+    if (updatedFormElement.validation) {
+      updatedFormElement.touched = true;
+      updatedFormElement.valid = this.checkValidity(
+        updatedFormElement.value, updatedFormElement.validation);
+    }
+
+
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
     this.setState(() => ({ orderForm: updatedOrderForm }));
@@ -99,6 +132,12 @@ class ContactData extends Component {
       <form onSubmit={this.orderHandler}>
         {formElements.map(formElement => (
           <Input
+            // check if input is valid
+            invalid={!formElement.config.valid}
+            // check if validation property is set then set to true (false for select)
+            shouldValidate={formElement.config.validation}
+            // check if user touched input (apply invalid classes only if did)
+            touched={formElement.config.touched}
             changed={event => this.inputChangedHandler(event, formElement.id)}
             key={formElement.id}
             elementType={formElement.config.elementType}
