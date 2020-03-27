@@ -1,4 +1,4 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions/actionTypes.js.js';
 
 
 const INGREDIENT_PRICES = {
@@ -9,12 +9,8 @@ const INGREDIENT_PRICES = {
 };
 
 const initialState = {
-  ingredients: {
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0
-  },
+  ingredients: null,
+  error: false,
   total_price: 4
 };
 
@@ -40,6 +36,19 @@ export default (state = initialState, action) => {
         [action.ingName]: state.ingredients[action.ingName] - 1
       },
       total_price: state.total_price + INGREDIENT_PRICES[action.ingName]
+    };
+
+  case actionTypes.SET_INGREDIENTS:
+    return {
+      ...state,
+      ingredients: action.ingredients,
+      error: false
+    };
+
+  case actionTypes.FETCH_INGREDIENTS_FAILED:
+    return {
+      ...state,
+      error: true
     };
 
   default:
