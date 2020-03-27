@@ -16,9 +16,17 @@ const purchaseBurgerStart = () => {
 };
 
 export const purchaseBurger = orderData => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(purchaseBurgerStart());
-    axios.post('/orders/', orderData)
+    // try {
+    // //   const response = await axios.post('/orders/', orderData);
+    //   const newOrder = { ...orderData, id: response.data.id };
+    //   dispatch(purchaseBurgerSuccess(newOrder));
+    //   return;
+    // } catch (error) {
+    //   dispatch(purchaseBurgerFail(error));
+    // }
+    return axios.post('/orders/', orderData)
       .then(response => {
         const newOrder = { ...orderData, id: response.data.id };
         dispatch(purchaseBurgerSuccess(newOrder));
@@ -27,4 +35,8 @@ export const purchaseBurger = orderData => {
         dispatch(purchaseBurgerFail(error));
       });
   };
+};
+
+export const purchaseInit = () => {
+  return { type: actionTypes.PURCHASE_INIT };
 };

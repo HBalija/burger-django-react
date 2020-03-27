@@ -110,7 +110,10 @@ class ContactData extends Component {
       order_address: this.state.orderForm.order_address.value,
       delivery_method: this.state.orderForm.delivery_method.value
     };
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order)
+      .then(() => {
+        this.props.history.push('/');
+      });
   }
 
   render () {

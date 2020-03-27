@@ -42,7 +42,8 @@ export default (state = initialState, action) => {
     return {
       ...state,
       ingredients: action.ingredients,
-      error: false
+      error: false,
+      total_price: initialState.total_price
     };
 
   case actionTypes.FETCH_INGREDIENTS_FAILED:
