@@ -15,4 +15,4 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ('cheese', 'bacon', 'salad', 'meat')
+        fields = ('salad', 'bacon', 'cheese',  'meat')

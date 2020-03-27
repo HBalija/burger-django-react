@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import * as actions from '../../../store/actions/index';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../../axios-order';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -62,12 +64,10 @@ class ContactData extends Component {
         },
         value: 'fastest',
         valid: true, // add valid and validation to simplfify validation checks
-        validation: {}  // empty object and true pass all validations
+        validation: {} // empty object and true pass all validations
       }
     },
-
-    loading: false,
-    formIsValid : false
+    formIsValid: false
   }
 
   checkValidity = (value, rules) => {
@@ -104,25 +104,13 @@ class ContactData extends Component {
   orderHandler = event => {
     event.preventDefault();
 
-    this.setState({ loading: true });
-
     const order = {
       ...this.props.ings,
       price: this.props.price.toFixed(1),
       order_address: this.state.orderForm.order_address.value,
       delivery_method: this.state.orderForm.delivery_method.value
     };
-
-    axios.post('/orders/', order)
-      .then(response => {
-        console.log(response); // eslint-disable-line no-console
-        this.setState({ loading:false });
-        this.props.history.push('/'); // redirect after sending request
-      })
-      .catch(error => {
-        console.log(error); // eslint-disable-line no-console
-        this.setState({ loading:false });
-      });
+    this.props.onOrderBurger(order);
   }
 
   render () {
@@ -151,7 +139,7 @@ class ContactData extends Component {
         <Button disabled={!this.state.formIsValid} btnType="success">ORDER</Button>
       </form>
     );
-    if (this.state.loading) form = <Spinner />;
+    if (this.props.loading) form = <Spinner />;
 
     return (
       <div className="contact-data">
@@ -164,9 +152,16 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients,
-    price: state.total_price
+    ings: state.burger.ingredients,
+    price: state.burger.total_price,
+    loading: state.order.loading
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import axios from '../../axios-order';
-import * as burgerActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Burger from '../../components/Burger/Burger';
@@ -60,7 +60,7 @@ class BurgerBuilder extends Component {
 
     return (
       <>
-        <Modal show={this.state.inPurchaseMode}  modalClosed={this.purchaseHandler}>
+        <Modal show={this.state.inPurchaseMode} modalClosed={this.purchaseHandler}>
           <OrderSummary
             total_price={this.props.total_price}
             ingredients={this.props.ings}
@@ -75,17 +75,17 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients,
-    total_price: state.total_price,
-    error: state.error
+    ings: state.burger.ingredients,
+    total_price: state.burger.total_price,
+    error: state.burger.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: ingName => dispatch(burgerActions.addIngredient(ingName)),
-    onIngredientRemoved: ingName => dispatch(burgerActions.removeIngredient(ingName)),
-    onIngredientsInit: () => dispatch(burgerActions.fetchIngredients())
+    onIngredientAdded: ingName => dispatch(actions.addIngredient(ingName)),
+    onIngredientRemoved: ingName => dispatch(actions.removeIngredient(ingName)),
+    onIngredientsInit: () => dispatch(actions.fetchIngredients())
   };
 };
 

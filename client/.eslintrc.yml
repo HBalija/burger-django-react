@@ -48,6 +48,12 @@ rules:
     - 1
   no-multiple-empty-lines:
     - warn
+  no-multi-spaces:
+    - warn
+  key-spacing:
+    - warn
+  comma-spacing:
+    - warn
   max-len:
     - 1
     - 100

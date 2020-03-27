@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actionTypes.js.js';
+import * as actionTypes from '../actions/actionTypes';
 
 
 const INGREDIENT_PRICES = {

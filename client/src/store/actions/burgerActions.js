@@ -1,6 +1,6 @@
 import axios from '../../axios-order';
 
-import * as actionTypes from './actionTypes.js.js';
+import * as actionTypes from './actionTypes';
 
 
 export const addIngredient = ingName => {
@@ -15,7 +15,7 @@ const setIngredients = ingredients => {
   return { type: actionTypes.SET_INGREDIENTS, ingredients };
 };
 
-const fetchIngredientsFailed =  () => {
+const fetchIngredientsFailed = () => {
   return { type: actionTypes.FETCH_INGREDIENTS_FAILED };
 };
 
