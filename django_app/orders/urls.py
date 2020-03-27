@@ -1,6 +1,6 @@
 from django.urls import path
 
-from orders.views import IngredientView, OrderViewSet
+from orders.views import IngredientView, OrderViewSet, UserRegisterView
 
 
 order_list = OrderViewSet.as_view({
@@ -18,5 +18,7 @@ order_detail = OrderViewSet.as_view({
 urlpatterns = [
     path('orders/', order_list, name='bookmark-list'),
     path('orders/<int:pk>/', order_detail, name='bookmark-detail'),
-    path('ingredients/', IngredientView.as_view(), name='ingredients')
+    path('ingredients/', IngredientView.as_view(), name='ingredients'),
+    path('register/', UserRegisterView.as_view(), name='user-register')
+
 ]

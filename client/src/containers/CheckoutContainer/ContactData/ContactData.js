@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as actions from '../../../store/actions/index';
+import * as actions from '../../../store/actions/actionIndex';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../../axios-order';
 import Button from '../../../components/UI/Button/Button';

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
+import { auth } from '../../store/actions/actionIndex';
 
 import './AuthContainer.scss';
 
@@ -77,6 +79,13 @@ class Auth extends Component {
     return isValid;
   }
 
+  submitHandler = event => {
+    event.preventDefault();
+
+    this.props.onAuth(
+      this.state.controls.email.value,
+      this.state.controls.password.value);
+  }
 
   render() {
 
@@ -101,7 +110,7 @@ class Auth extends Component {
 
     return (
       <div className="auth">
-        <form>
+        <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="success">SUBMIT</Button>
         </form>
@@ -110,4 +119,10 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (email, password) => dispatch(auth(email, password))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Auth);

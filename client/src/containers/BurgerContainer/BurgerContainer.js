@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import axios from '../../axios-order';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../store/actions/actionIndex';
 
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Burger from '../../components/Burger/Burger';

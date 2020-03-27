@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import axios from '../../axios-order';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../store/actions/actionIndex';
 
 import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
