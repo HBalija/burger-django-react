@@ -8,5 +8,5 @@ export {
   fetchOrders } from './orderActions';
 
 export {
-  auth
+  Auth
 } from './authActions';
