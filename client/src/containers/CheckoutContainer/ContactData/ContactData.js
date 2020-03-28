@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../../store/actions/actionIndex';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import axios from '../../../axios-order';
+import axios from '../../../axios';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';

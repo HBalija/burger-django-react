@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-order';
+import axios from '../../axios';
 
 
 const authStart = () => {
@@ -18,24 +18,21 @@ const obtainToken = async (dispatch, authData) => {
 /* helper function for retrieving token on LOGIN and REGISTER */
 
   const response = await axios.post('/api/token/obtain/', authData);
-
   const data = {
     email: authData.email,
-    isAuthenticated: !!response.data.access,
+    // isAuthenticated: !!response.data.access,
     accessToken: response.data.access,
     refreshToken: response.data.refresh,
   };
-
-  console.log(data);
   dispatch(authSuccess(data));
-  // localStorage.setItem('bookmarksData', JSON.stringify(data));
+  return 'SUCCESS';
+  // localStorage.setItem('userData', JSON.stringify(data));
+
 };
 
 export const Auth = (authData, method) => {
   return async dispatch => {
-
     dispatch(authStart());
-
     if (method === 'signup') {
       return axios.post('/register/', authData)
         .then(() => {
@@ -45,7 +42,10 @@ export const Auth = (authData, method) => {
           dispatch(authFail(error));
         });
     } else {
-      return obtainToken(dispatch, authData);
+      return obtainToken(dispatch, authData)
+        .catch(error => {
+          dispatch(authFail(error));
+        });
     }
   };
 };

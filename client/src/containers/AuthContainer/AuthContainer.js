@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/actionIndex';
 
 import './AuthContainer.scss';
@@ -88,7 +89,9 @@ class Auth extends Component {
     };
     const method = this.state.isSignup ? 'signup' : 'signin';
     this.props.onAuth(authData, method)
-      .then(() => this.props.history.push('/'));
+      .then(data => {
+        if (data && data === 'SUCCESS') this.props.history.push('/');
+      });
   }
 
   switchAuthModeHandler = () => {
@@ -96,7 +99,6 @@ class Auth extends Component {
   }
 
   render() {
-
     const formElements = [];
     for (let key in this.state.controls) {
       formElements.push({
@@ -105,7 +107,7 @@ class Auth extends Component {
       });
     }
 
-    const form = formElements.map(formElement => (
+    let form = formElements.map(formElement => (
       <Input
         invalid={!formElement.config.valid}
         touched={formElement.config.touched}
@@ -115,9 +117,17 @@ class Auth extends Component {
         value={formElement.config.value}
         key={formElement.id} />
     ));
+    if (this.props.loading) form = <Spinner />;
+
+    let errorMessage = null;
+    if (this.props.error) {
+      const errorObj = this.props.error.response.data;
+      errorMessage = <p>{errorObj[Object.keys(errorObj)[0]]}</p>;
+    }
 
     return (
       <div className="auth">
+        {errorMessage}
         <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="success">SUBMIT</Button>
@@ -130,10 +140,17 @@ class Auth extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (authData, method) => dispatch(actions.Auth(authData, method))
   };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
