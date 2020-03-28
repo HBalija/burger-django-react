@@ -15,32 +15,6 @@ class ContactData extends Component {
 
   state = {
     orderForm: {
-      name: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: 'Your name'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
-      },
-      email: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'email',
-          placeholder: 'Your email'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
-      },
       order_address: {
         elementType: 'input',
         elementConfig: {
@@ -110,7 +84,7 @@ class ContactData extends Component {
       order_address: this.state.orderForm.order_address.value,
       delivery_method: this.state.orderForm.delivery_method.value
     };
-    this.props.onOrderBurger(order)
+    this.props.onOrderBurger(order, this.props.token)
       .then(() => {
         this.props.history.push('/');
       });
@@ -157,13 +131,14 @@ const mapStateToProps = state => {
   return {
     ings: state.burger.ingredients,
     price: state.burger.total_price,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.accessToken
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData))
+    onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
   };
 };
 

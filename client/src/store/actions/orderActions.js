@@ -15,10 +15,10 @@ const purchaseBurgerStart = () => {
   return { type: actionTypes.PURCHASE_BURGER_START };
 };
 
-export const purchaseBurger = orderData => {
+export const purchaseBurger = (orderData, token) => {
   return async dispatch => {
     dispatch(purchaseBurgerStart());
-    return axios.post('/orders/', orderData)
+    return axios.post('/orders/', orderData, { headers: { Authorization: `JWT ${token}` } })
       .then(response => {
         const newOrder = { ...orderData, id: response.data.id };
         dispatch(purchaseBurgerSuccess(newOrder));
@@ -41,10 +41,10 @@ const fetchOrdersFail = error => {
   return { type: actionTypes.FETCH_ORDERS_FAIL, error };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = token => {
   return dispatch => {
     dispatch(fetchOrdersStart());
-    axios.get('/orders')
+    axios.get('/orders', { headers: { Authorization: `JWT ${token}` } })
       .then(response => {
         dispatch(fetchOrdersSuccess(response.data));
         // this.setState(() => ({ orders: response.data, loading: false }));
