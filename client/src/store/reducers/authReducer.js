@@ -36,7 +36,8 @@ const authReducer = (state = initialState, action) => {
   case actionTypes.AUTH_LOGOUT:
     return {
       ...state,
-
+      accessToken: null,
+      email: null
     };
 
   default:
