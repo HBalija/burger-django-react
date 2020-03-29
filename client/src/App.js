@@ -18,21 +18,39 @@ class App extends Component {
   }
 
   render() {
+
+    let routes = (
+      <Switch>
+        <Route component={BurgerContainer} exact path="/" />
+        <Route component={AuthContainer} path="/auth" />
+      </Switch>
+    );
+
+    if (this.props.isAuthenticated) {
+      routes = (
+        <Switch>
+          <Route component={BurgerContainer} exact path="/" />
+          <Route component={CheckoutContainer} path="/checkout" />
+          <Route component={OrdersContainer} path="/orders" />
+          <Route component={AuthContainer} path="/auth" />
+          <Route component={Logout} path="/logout" />
+        </Switch>
+      );
+    }
+
     return (
-      <div>
-        <Layout>
-          <Switch>
-            <Route component={BurgerContainer} exact path="/" />
-            <Route component={CheckoutContainer} path="/checkout" />
-            <Route component={OrdersContainer} path="/orders" />
-            <Route component={AuthContainer} path="/auth" />
-            <Route component={Logout} path="/logout" />
-          </Switch>
-        </Layout>
-      </div>
+      <Layout>
+        {routes}
+      </Layout>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.email !== null
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -40,4 +58,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

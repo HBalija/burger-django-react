@@ -10,8 +10,8 @@ const authStart = () => {
   return { type: actionTypes.AUTH_START };
 };
 
-const authSuccess = authData => {
-  return { type: actionTypes.AUTH_SUCCESS, authData };
+const authSuccess = (email, token) => {
+  return { type: actionTypes.AUTH_SUCCESS, email, token };
 };
 
 const authFail = error => {
@@ -19,7 +19,6 @@ const authFail = error => {
 };
 
 export const logout = () => {
-
   localStorage.removeItem('userData');
   return {
     type: actionTypes.AUTH_LOGOUT
@@ -49,9 +48,9 @@ const obtainToken = async (dispatch, authData) => {
     // refreshToken: response.data.refresh,
     expirationDate
   };
-  dispatch(authSuccess(data));
-  dispatch(checkAuthTimeout(EXPIRATION_TIME));
   localStorage.setItem('userData', JSON.stringify(data));
+  dispatch(authSuccess(authData.email, response.data.access));
+  dispatch(checkAuthTimeout(EXPIRATION_TIME));
   return 'SUCCESS'; // not required anymore cause we use redirect component in auth container
 };
 
@@ -67,7 +66,7 @@ export const authCheckState = () => {
       if (expirationDate > new Date()) {
         const accessToken = userData.accessToken;
         const email = userData.email;
-        dispatch(authSuccess({ accessToken, email }));
+        dispatch(authSuccess(email, accessToken));
         // dispatch time delta to calculate time our token is valid
         dispatch(checkAuthTimeout(expirationDate.getTime() - new Date().getTime()));
       } else {

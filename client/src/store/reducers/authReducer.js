@@ -24,7 +24,8 @@ const authReducer = (state = initialState, action) => {
       ...state,
       error: null,
       loading: false,
-      ...action.authData
+      email: action.email,
+      accessToken: action.token
     };
 
   case actionTypes.AUTH_FAIL:

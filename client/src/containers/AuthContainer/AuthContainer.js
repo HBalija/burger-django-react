@@ -90,11 +90,10 @@ class Auth extends Component {
     };
     const method = this.state.isSignup ? 'signup' : 'signin';
     this.props.onAuth(authData, method);
-    // lets use redirect component for for redirecting if user is authenticated
-    // now we don't need to return promise from our action grenerator
-    /*       .then(data => {
-        if (data && data === 'SUCCESS') this.props.history.push('/');
-      }); */
+    // redirect to "/" after login
+    // .then(data => {
+    //   if (data && data === 'SUCCESS') this.props.history.push('/');
+    // });
   }
 
   switchAuthModeHandler = () => {
@@ -128,12 +127,19 @@ class Auth extends Component {
       errorMessage = <p>{errorObj[Object.keys(errorObj)[0]]}</p>;
     }
 
+    let redirectTo = null;
+    if (this.props.email) {
+      // redirect to '/' on authentication
+      redirectTo = '/';
+      if (this.props.burgerBuilding) {
+        // redirect to '/' on authentication while purchasing burger
+        redirectTo = '/checkout';
+      }
+    }
+
     return (
       <div className="auth">
-        {/* redirect to checkout after authentication if burger building in process */}
-        {(this.props.email && this.props.burgerBuilding) && <Redirect to="/checkout" />}
-        {/* redirect to "/" if user is authenticated */}
-        {this.props.email && <Redirect to="/" />}
+        {redirectTo && <Redirect to={redirectTo} />}
 
         {errorMessage}
         <form onSubmit={this.submitHandler}>
