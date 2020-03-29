@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Button from '../../components/UI/Button/Button';
@@ -88,10 +89,12 @@ class Auth extends Component {
       password: this.state.controls.password.value
     };
     const method = this.state.isSignup ? 'signup' : 'signin';
-    this.props.onAuth(authData, method)
-      .then(data => {
+    this.props.onAuth(authData, method);
+    // lets use redirect component for for redirecting if user is authenticated
+    // now we don't need to return promise from our action grenerator
+    /*       .then(data => {
         if (data && data === 'SUCCESS') this.props.history.push('/');
-      });
+      }); */
   }
 
   switchAuthModeHandler = () => {
@@ -127,13 +130,18 @@ class Auth extends Component {
 
     return (
       <div className="auth">
+        {/* redirect to checkout after authentication if burger building in process */}
+        {(this.props.email && this.props.burgerBuilding) && <Redirect to="/checkout" />}
+        {/* redirect to "/" if user is authenticated */}
+        {this.props.email && <Redirect to="/" />}
+
         {errorMessage}
         <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="success">SUBMIT</Button>
         </form>
         <Button clicked={this.switchAuthModeHandler} btnType="danger">
-          SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}
+        SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}
         </Button>
       </div>
     );
@@ -143,7 +151,9 @@ class Auth extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
+    email: state.auth.email,
+    burgerBuilding: state.burger.building
   };
 };
 
