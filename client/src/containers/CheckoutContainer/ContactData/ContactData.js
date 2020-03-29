@@ -7,6 +7,7 @@ import axios from '../../../axios';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import { checkValidity } from '../../../shared/utility';
 
 import './ContactData.scss';
 
@@ -44,15 +45,6 @@ class ContactData extends Component {
     formIsValid: false
   }
 
-  checkValidity = (value, rules) => {
-    let isValid = true;
-
-    if (rules.required) isValid = value.trim() !== '' && isValid;
-    if (rules.minLength) isValid = value.length >= rules.minLength && isValid;
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, inputIdentifier) => {
     // create deep copies of nested objects (we need to access value property)
     const updatedOrderForm = { ...this.state.orderForm };
@@ -61,7 +53,7 @@ class ContactData extends Component {
     updatedFormElement.value = event.target.value;
 
     updatedFormElement.touched = true;
-    updatedFormElement.valid = this.checkValidity(
+    updatedFormElement.valid = checkValidity(
       updatedFormElement.value, updatedFormElement.validation);
 
     updatedOrderForm[inputIdentifier] = updatedFormElement;

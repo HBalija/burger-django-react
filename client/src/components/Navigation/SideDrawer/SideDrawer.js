@@ -11,8 +11,8 @@ const SideDrawer = props => {
   const attachedClasses = ['side-drawer', props.open ? 'open': 'close'].join(' ');
   return (
     <>
-      <Backdrop show={props.open}  clicked={props.closed} />
-      <div className={attachedClasses}>
+      <Backdrop show={props.open} clicked={props.closed} />
+      <div className={attachedClasses} onClick={props.closed}>
         <div className="side-drawer-logo">
           <Logo />
         </div>
