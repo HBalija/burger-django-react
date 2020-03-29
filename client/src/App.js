@@ -6,6 +6,7 @@ import AuthContainer from './containers/AuthContainer/AuthContainer';
 import BurgerContainer from './containers/BurgerContainer/BurgerContainer';
 import CheckoutContainer from './containers/CheckoutContainer/CheckoutContainer';
 import OrdersContainer from './containers/OrdersContainer/OrdersContainer';
+import Logout from './containers/AuthContainer/Logout/Logout';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route component={CheckoutContainer} path="/checkout" />
           <Route component={OrdersContainer} path="/orders" />
           <Route component={AuthContainer} path="/auth" />
+          <Route component={Logout} path="/logout" />
         </Switch>
       </Layout>
     </div>

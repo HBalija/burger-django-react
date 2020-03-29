@@ -30,7 +30,7 @@ const obtainToken = async (dispatch, authData) => {
 
 };
 
-export const Auth = (authData, method) => {
+export const auth = (authData, method) => {
   return async dispatch => {
     dispatch(authStart());
     if (method === 'signup') {
@@ -49,6 +49,14 @@ export const Auth = (authData, method) => {
     }
   };
 };
+
+export const logout = () => {
+  // localStorage.removeItem('bookmarksData');
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
+
 
 /*
 export const onRefreshAuthenticate = () => {
