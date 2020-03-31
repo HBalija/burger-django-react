@@ -6,7 +6,7 @@ import NavigationItem from './NavigationItem/NavigationItem';
 import './NavigationItems.scss';
 
 
-const NavigationItems = ({ email }) => {
+export const NavigationItems = ({ email }) => {
 
   let auth = <NavigationItem link="/auth">Authenticate</NavigationItem>;
   if (email) auth = (
