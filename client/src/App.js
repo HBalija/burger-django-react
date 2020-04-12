@@ -32,7 +32,7 @@ const App = props => {
   let routes = (
     <Switch>
       <Route component={BurgerContainer} exact path="/" />
-      <Route render={() => Auth} path="/auth" />
+      <Route render={() => <Auth />} path="/auth" />
     </Switch>
   );
 
@@ -40,9 +40,9 @@ const App = props => {
     routes = (
       <Switch>
         <Route component={BurgerContainer} exact path="/" />
-        <Route render={() => Checkout} path="/checkout" />
-        <Route render={() => Orders} path="/orders" />
-        <Route render={() => Auth} path="/auth" />
+        <Route render={() => <Checkout />} path="/checkout" />
+        <Route render={() => <Orders />} path="/orders" />
+        <Route render={() => <Auth />} path="/auth" />
         <Route component={Logout} path="/logout" />
       </Switch>
     );
