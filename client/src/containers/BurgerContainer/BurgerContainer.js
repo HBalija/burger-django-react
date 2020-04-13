@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import axios from '../../axios';
@@ -12,72 +12,68 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
-export class BurgerBuilder extends Component {
+export const BurgerBuilder = props => {
 
-  state = {
-    inPurchaseMode: false,
-  }
+  const [inPurchaseMode, setInPurchaseMode] = useState(false);
 
-  componentDidMount() {
-    this.props.onIngredientsInit();
-  }
+  useEffect(() => {
+    props.onIngredientsInit();
+  }, []) // eslint-disable-line
 
-  purchaseHandler = () => {
-    if (this.props.email) {
-      this.setState(prevState => ({ inPurchaseMode: !prevState.inPurchaseMode }));
+  const purchaseHandler = () => {
+    if (props.email) {
+      setInPurchaseMode(prevState => !prevState);
     } else {
-      this.props.history.push('/auth');
+      props.history.push('/auth');
     }
-  }
+  };
 
-  updatePurchaseState = () => {
+  const updatePurchaseState = () => {
     // return true or false depending if ingredients have been added
     let sum = 0;
-    for (let property in this.props.ings) {
-      sum += this.props.ings[property];
+    for (let property in props.ings) {
+      sum += props.ings[property];
     }
     return sum > 0;
-  }
+  };
 
-  purchaseContinueHandler = () => {
-    this.props.history.push('/checkout');
-  }
+  const purchaseContinueHandler = () => {
+    props.history.push('/checkout');
+  };
 
-  render() {
-    // use spinner while fetching ingredients
-    let burger = this.props.error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
-    if (this.props.ings) {
-      burger = (
-        <>
-          <Burger ingredients={this.props.ings} />
-          <BuildControls
-            handlePurchase={this.purchaseHandler}
-            total_price={this.props.total_price}
-            purchasable={this.updatePurchaseState()}
-            ingredientAdded={this.props.onIngredientAdded}
-            ingredientRemoved={this.props.onIngredientRemoved}
-            // will use boolean value to check if "less" button should be disabled
-            ingredients={this.props.ings}
-            // check if user is authenticated
-            isAuth={this.props.email !== null} />
-        </>
-      );
-    }
-
-    return (
+  // use spinner while fetching ingredients
+  let burger = props.error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
+  if (props.ings) {
+    burger = (
       <>
-        <Modal show={this.state.inPurchaseMode} modalClosed={this.purchaseHandler}>
-          <OrderSummary
-            total_price={this.props.total_price}
-            ingredients={this.props.ings}
-            onContinue={this.purchaseContinueHandler}
-            onCancel={this.purchaseHandler} />
-        </Modal>
-        {burger}
+        <Burger ingredients={props.ings} />
+        <BuildControls
+          handlePurchase={purchaseHandler}
+          total_price={props.total_price}
+          purchasable={updatePurchaseState()}
+          ingredientAdded={props.onIngredientAdded}
+          ingredientRemoved={props.onIngredientRemoved}
+          // will use boolean value to check if "less" button should be disabled
+          ingredients={props.ings}
+          // check if user is authenticated
+          isAuth={props.email !== null} />
       </>
     );
   }
-}
+
+  return (
+    <>
+      <Modal show={inPurchaseMode} modalClosed={purchaseHandler}>
+        <OrderSummary
+          total_price={props.total_price}
+          ingredients={props.ings}
+          onContinue={purchaseContinueHandler}
+          onCancel={purchaseHandler} />
+      </Modal>
+      {burger}
+    </>
+  );
+};
 
 const mapStateToProps = state => {
   return {

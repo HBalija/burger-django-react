@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
         ...state.ingredients,
         [action.ingName]: state.ingredients[action.ingName] - 1
       },
-      total_price: state.total_price + INGREDIENT_PRICES[action.ingName],
+      total_price: state.total_price - INGREDIENT_PRICES[action.ingName],
       building: true
     };
 
