@@ -4,7 +4,9 @@ import Button from '../../UI/Button/Button';
 
 
 const OrderSummary = props => {
+
   const ingredients = [];
+
   for (let property in props.ingredients) {
     ingredients.push(
       <li key={property}><span
