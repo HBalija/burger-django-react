@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import axios from '../../axios';
@@ -9,25 +9,24 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
-class OrdersContainer extends Component {
+const OrdersContainer = props => {
+  const { orders, loading, token, onFetchOrders } = props;
 
-  componentDidMount() {
-    this.props.onFetchOrders(this.props.token);
+  useEffect(() => {
+    onFetchOrders(token);
+  }, []) // eslint-disable-line
+
+  let jsx = <Spinner />;
+  if (!loading) {
+    jsx = orders.map(order => <Order key={order.id} {...order} />);
   }
 
-  render() {
-
-    let orders = <Spinner />;
-    if (!this.props.loading) {
-      orders = this.props.orders.map(order => <Order key={order.id} {...order} />);
-    }
-    return (
-      <div>
-        {orders}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {jsx}
+    </div>
+  );
+};
 
 const mapStateToProps = state => {
   return {
