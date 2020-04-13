@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import axios from '../../axios';
 import * as actions from '../../store/actions/actionIndex';
@@ -13,16 +13,25 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
 export const BurgerBuilder = props => {
-  const { onIngredientsInit } = props;
 
   const [inPurchaseMode, setInPurchaseMode] = useState(false);
+
+  const dispatch = useDispatch();
+  const onIngredientAdded = ingName => dispatch(actions.addIngredient(ingName));
+  const onIngredientRemoved = ingName => dispatch(actions.removeIngredient(ingName));
+  const onIngredientsInit = useCallback(() => dispatch(actions.fetchIngredients()), [dispatch]);
+
+  const ings = useSelector(state => state.burger.ingredients);
+  const total_price = useSelector(state => state.burger.total_price);
+  const error = useSelector(state => state.burger.error);
+  const email = useSelector(state => state.auth.email);
 
   useEffect(() => {
     onIngredientsInit();
   }, [onIngredientsInit]);
 
   const purchaseHandler = () => {
-    if (props.email) {
+    if (email) {
       setInPurchaseMode(prevState => !prevState);
     } else {
       props.history.push('/auth');
@@ -32,8 +41,8 @@ export const BurgerBuilder = props => {
   const updatePurchaseState = () => {
     // return true or false depending if ingredients have been added
     let sum = 0;
-    for (let property in props.ings) {
-      sum += props.ings[property];
+    for (let property in ings) {
+      sum += ings[property];
     }
     return sum > 0;
   };
@@ -43,21 +52,21 @@ export const BurgerBuilder = props => {
   };
 
   // use spinner while fetching ingredients
-  let burger = props.error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
-  if (props.ings) {
+  let burger = error ? <p>Ingrediants can't be loaded!</p> : <Spinner />;
+  if (ings) {
     burger = (
       <>
-        <Burger ingredients={props.ings} />
+        <Burger ingredients={ings} />
         <BuildControls
           handlePurchase={purchaseHandler}
-          total_price={props.total_price}
+          total_price={total_price}
           purchasable={updatePurchaseState()}
-          ingredientAdded={props.onIngredientAdded}
-          ingredientRemoved={props.onIngredientRemoved}
+          ingredientAdded={onIngredientAdded}
+          ingredientRemoved={onIngredientRemoved}
           // will use boolean value to check if "less" button should be disabled
-          ingredients={props.ings}
+          ingredients={ings}
           // check if user is authenticated
-          isAuth={props.email !== null} />
+          isAuth={email !== null} />
       </>
     );
   }
@@ -66,8 +75,8 @@ export const BurgerBuilder = props => {
     <>
       <Modal show={inPurchaseMode} modalClosed={purchaseHandler}>
         <OrderSummary
-          total_price={props.total_price}
-          ingredients={props.ings}
+          total_price={total_price}
+          ingredients={ings}
           onContinue={purchaseContinueHandler}
           onCancel={purchaseHandler} />
       </Modal>
@@ -76,21 +85,4 @@ export const BurgerBuilder = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    ings: state.burger.ingredients,
-    total_price: state.burger.total_price,
-    error: state.burger.error,
-    email: state.auth.email
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onIngredientAdded: ingName => dispatch(actions.addIngredient(ingName)),
-    onIngredientRemoved: ingName => dispatch(actions.removeIngredient(ingName)),
-    onIngredientsInit: () => dispatch(actions.fetchIngredients())
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
+export default withErrorHandler(BurgerBuilder, axios);
