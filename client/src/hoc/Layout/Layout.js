@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
@@ -6,26 +6,24 @@ import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 import './Layout.scss';
 
 
-class Layout extends React.Component {
+const Layout = props => {
 
-  state = {
-    showSideDrawer: false
-  }
+  const [showSideDrawer, setShowSideDrawer] = useState(false);
 
-  sideDrawerHandler = () => {
-    this.setState(prevState => ({ showSideDrawer: !prevState.showSideDrawer }));
-  }
 
-  render() {
-    return (
-      <>
-        <Toolbar onSideDrawerAction={this.sideDrawerHandler} />
-        <SideDrawer open={this.state.showSideDrawer} closed={this.sideDrawerHandler} />
-        <main className="content">
-          {this.props.children}
-        </main>
-      </>
-    );
-  }
-}
+  const sideDrawerHandler = () => {
+    setShowSideDrawer(!showSideDrawer);
+  };
+
+  return (
+    <>
+      <Toolbar onSideDrawerAction={sideDrawerHandler} />
+      <SideDrawer open={showSideDrawer} closed={sideDrawerHandler} />
+      <main className="content">
+        {props.children}
+      </main>
+    </>
+  );
+};
+
 export default Layout;

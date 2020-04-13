@@ -1,46 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Modal from '../../components/UI/Modal/Modal';
 
 
 const withErrorHandler = (WrappedComponent, axios) => {
-  return class extends React.Component {
+  return props => {
 
-    state = {
-      error: null
-    }
+    const [error, setError] = useState(null);
 
-    componentWillMount() {
-      // setup global request / response interceptors
-      this.requestInterceptor = axios.interceptors.request.use(request => {
-        this.setState({ error: null });
-        return request;
+    // before: component willMount
+    // setup global request / response interceptors
+    const requestInterceptor = axios.interceptors.request.use(request => {
+      setError(null);
+      return request;
+    });
+
+    const responseInterceptor = axios.interceptors.response.use(
+      response => response,
+      err => {
+        setError(err);
       });
 
-      this.responseInterceptor = axios.interceptors.response.use(
-        response => response,
-        error => {
-          this.setState({ error });
-        });
-    }
+    // before: component will unmount
+    // we clean up whenever our interceptors change
+    useEffect(() => {
+      return () => {
+        axios.interceptors.request.eject(requestInterceptor);
+        axios.interceptors.request.eject(responseInterceptor);
+      };
+    }, [requestInterceptor, responseInterceptor]);
 
-    componentWillUnmount() {
-      axios.interceptors.request.eject(this.requestInterceptor);
-      axios.interceptors.request.eject(this.responseInterceptor);
-    }
-
-    render() {
-      return (
-        <>
-          <Modal
-            show={this.state.error}
-            modalClosed={() => this.setState({ error: null })}>
-            {this.state.error && this.state.error.message}
-          </Modal>
-          <WrappedComponent { ...this.props } />
-        </>
-      );
-    }
+    return (
+      <>
+        <Modal
+          show={error}
+          modalClosed={() => setError(null)}>
+          {error && error.message}
+        </Modal>
+        <WrappedComponent { ...props } />
+      </>
+    );
   };
 
 };
