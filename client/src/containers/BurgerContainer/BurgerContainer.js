@@ -13,12 +13,13 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
 export const BurgerBuilder = props => {
+  const { onIngredientsInit } = props;
 
   const [inPurchaseMode, setInPurchaseMode] = useState(false);
 
   useEffect(() => {
-    props.onIngredientsInit();
-  }, []) // eslint-disable-line
+    onIngredientsInit();
+  }, [onIngredientsInit]);
 
   const purchaseHandler = () => {
     if (props.email) {

@@ -14,7 +14,7 @@ const OrdersContainer = props => {
 
   useEffect(() => {
     onFetchOrders(token);
-  }, []) // eslint-disable-line
+  }, [onFetchOrders, token]);
 
   let jsx = <Spinner />;
   if (!loading) {

@@ -6,10 +6,11 @@ import * as actions from '../../../store/actions/actionIndex';
 
 
 const Logout = props => {
+  const { onLogout } = props;
 
   useEffect(() => {
-    props.onLogout();
-  }, []); // eslint-disable-line
+    onLogout();
+  }, [onLogout]);
 
   return <Redirect to="/" />;
 };

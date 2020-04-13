@@ -24,10 +24,11 @@ const Auth = React.lazy(() => {
 
 
 const App = props => {
+  const { onTryAutoSignin } = props;
 
   useEffect(() => {
-    props.onTryAutoSignin();
-  }, []); // eslint-disable-line
+    onTryAutoSignin();
+  }, [onTryAutoSignin]);
 
   let routes = (
     <Switch>
